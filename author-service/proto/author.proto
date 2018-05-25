@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package publication.management.author;
+
+service AuthorService {
+    rpc CreateAuthor(Author) returns (Response) {}
+    rpc GetAuthor(Author) returns (Response) {}
+    rpc GetAll(GetAllRequest) returns (Response) {}
+    rpc ValidateToken(Token) returns (Token) {}
+    rpc Authenticate(Author) returns (Token) {}
+}
+
+message Author {
+    int32  id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string address = 4;
+    string country = 5;
+    string email = 6;
+    string password = 7;
+    string token = 8;
+}
+
+message Token {
+    string token = 1;
+    bool valid = 2;
+    repeated Error errors = 3;
+}
+
+message GetAllRequest {}
+
+message Response {
+    bool created = 1;
+    Author author = 2;
+    repeated Author authors = 3;
+    repeated Error errors = 4;
+    Token token = 5;
+}
+
+message Error {
+    int32 code = 1;
+    string description = 2;
+}
+
