@@ -19,10 +19,10 @@ dev: protoc
 
 run:
 	docker run \
+	--name="author-service" \
 	--net="host" \
 	--rm \
 	-p 50051:50051 \
 	-e DB_USER=author_user \
 	-e DB_PASS=authorpass \
-	--name="author-service" \
 	quay.io/tamarakaufler/grpc-author-service:$(IMAGE_TAG)
