@@ -15,7 +15,7 @@ type Datastore interface {
 	Create(*proto.Author) error
 	Get(id string) error
 	GetByEmail(author *proto.Author) (*proto.Author, error)
-	GetAll() ([]*proto.Author, error)
+	GetAllAuthors() ([]*proto.Author, error)
 	Update(*proto.Author) error
 }
 

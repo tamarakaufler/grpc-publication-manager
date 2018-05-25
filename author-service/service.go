@@ -50,7 +50,7 @@ func (s *service) GetAuthor(ctx context.Context, req *proto.Author) (*proto.Resp
 	return res, nil
 }
 
-func (s *service) GetAll(ctx context.Context, req *proto.GetAllRequest) (*proto.Response, error) {
+func (s *service) GetAllAuthors(ctx context.Context, req *proto.GetAllRequest) (*proto.Response, error) {
 	authors, err := s.db.GetAll()
 	if err != nil {
 		return nil, err

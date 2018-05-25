@@ -5,7 +5,7 @@ package publication.management.author;
 service AuthorService {
     rpc CreateAuthor(Author) returns (EmptyResponse) {}
     rpc GetAuthor(Author) returns (Response) {}
-    rpc GetAll(GetAllRequest) returns (Response) {}
+    rpc GetAllAuthors(GetAllRequest) returns (Response) {}
     rpc ValidateToken(Token) returns (Token) {}
     rpc InvalidateToken(Author) returns (EmptyResponse) {}
     rpc Authenticate(Author) returns (Token) {}
