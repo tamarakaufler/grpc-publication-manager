@@ -7,6 +7,8 @@
   - docker run --rm -e POSTGRES_PASSWORD=mypass -p 5432:5432 --name author_postgres author_postgres       (does not detach and provides insight into what is happening during the setup)
   - docker run --rm -e POSTGRES_PASSWORD=mypass -p 5432:5432 -d --name author_postgres author_postgres
 
+  - docker build -t author_postgres . && docker run --rm -d -p 5432:5432 --name author_postgres author_postgres
+
 ## testing it works
   - docker run --rm -e POSTGRES_PASSWORD=mypass -p 5432:5432 --name author_postgres author_postgres
   - psql -h localhost -p 5432 -U postgres               (connecting locally from a terminal)

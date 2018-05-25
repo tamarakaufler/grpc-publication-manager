@@ -3,15 +3,16 @@ syntax = "proto3";
 package publication.management.author;
 
 service AuthorService {
-    rpc CreateAuthor(Author) returns (Response) {}
+    rpc CreateAuthor(Author) returns (EmptyResponse) {}
     rpc GetAuthor(Author) returns (Response) {}
     rpc GetAll(GetAllRequest) returns (Response) {}
     rpc ValidateToken(Token) returns (Token) {}
+    rpc InvalidateToken(Author) returns (EmptyResponse) {}
     rpc Authenticate(Author) returns (Token) {}
 }
 
 message Author {
-    int32  id = 1;
+    string id = 1;
     string first_name = 2;
     string last_name = 3;
     string address = 4;
@@ -27,6 +28,7 @@ message Token {
     repeated Error errors = 3;
 }
 
+message EmptyResponse {}
 message GetAllRequest {}
 
 message Response {

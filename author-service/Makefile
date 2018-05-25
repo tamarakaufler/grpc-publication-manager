@@ -2,7 +2,7 @@ IMAGE_TAG=v1alpha1
 QUAY_PASS?=biggestsecret
 
 protoc:
-	protoc -I/usr/local/include -I. --go_out=plugins=micro:$(GOPATH)/src/github.com/tamarakaufler/grpc-publication-manager/author-service \
+	protoc -I/usr/local/include -I. --go_out=plugins=grpc:$(GOPATH)/src/github.com/tamarakaufler/grpc-publication-manager/author-service \
     proto/author.proto
 	
 build: protoc
@@ -18,9 +18,11 @@ dev: protoc
 	docker build -t quay.io/tamarakaufler/grpc-author-service:$(IMAGE_TAG) .
 
 run:
-	docker run --net="host" \
-	--name="author-service" \
+	docker run \
+	--net="host" \
+	--rm \
 	-p 50051:50051 \
-	-e DB_HOST=localhost:5432 \
-	-e DB_USER=postgres \
+	-e DB_USER=author_user \
+	-e DB_PASS=authorpass \
+	--name="author-service" \
 	quay.io/tamarakaufler/grpc-author-service:$(IMAGE_TAG)

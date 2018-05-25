@@ -8,9 +8,8 @@ import fmt "fmt"
 import math "math"
 
 import (
-	client "github.com/micro/go-micro/client"
-	server "github.com/micro/go-micro/server"
 	context "golang.org/x/net/context"
+	grpc "google.golang.org/grpc"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -42,7 +41,7 @@ func (m *Author) Reset()         { *m = Author{} }
 func (m *Author) String() string { return proto.CompactTextString(m) }
 func (*Author) ProtoMessage()    {}
 func (*Author) Descriptor() ([]byte, []int) {
-	return fileDescriptor_author_72dfe00c5313624c, []int{0}
+	return fileDescriptor_author_a6d61f4ff1ae4ce3, []int{0}
 }
 func (m *Author) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Author.Unmarshal(m, b)
@@ -131,7 +130,7 @@ func (m *Token) Reset()         { *m = Token{} }
 func (m *Token) String() string { return proto.CompactTextString(m) }
 func (*Token) ProtoMessage()    {}
 func (*Token) Descriptor() ([]byte, []int) {
-	return fileDescriptor_author_72dfe00c5313624c, []int{1}
+	return fileDescriptor_author_a6d61f4ff1ae4ce3, []int{1}
 }
 func (m *Token) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Token.Unmarshal(m, b)
@@ -172,6 +171,36 @@ func (m *Token) GetErrors() []*Error {
 	return nil
 }
 
+type EmptyResponse struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *EmptyResponse) Reset()         { *m = EmptyResponse{} }
+func (m *EmptyResponse) String() string { return proto.CompactTextString(m) }
+func (*EmptyResponse) ProtoMessage()    {}
+func (*EmptyResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_author_a6d61f4ff1ae4ce3, []int{2}
+}
+func (m *EmptyResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_EmptyResponse.Unmarshal(m, b)
+}
+func (m *EmptyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_EmptyResponse.Marshal(b, m, deterministic)
+}
+func (dst *EmptyResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EmptyResponse.Merge(dst, src)
+}
+func (m *EmptyResponse) XXX_Size() int {
+	return xxx_messageInfo_EmptyResponse.Size(m)
+}
+func (m *EmptyResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_EmptyResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EmptyResponse proto.InternalMessageInfo
+
 type GetAllRequest struct {
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -182,7 +211,7 @@ func (m *GetAllRequest) Reset()         { *m = GetAllRequest{} }
 func (m *GetAllRequest) String() string { return proto.CompactTextString(m) }
 func (*GetAllRequest) ProtoMessage()    {}
 func (*GetAllRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_author_72dfe00c5313624c, []int{2}
+	return fileDescriptor_author_a6d61f4ff1ae4ce3, []int{3}
 }
 func (m *GetAllRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetAllRequest.Unmarshal(m, b)
@@ -217,7 +246,7 @@ func (m *Response) Reset()         { *m = Response{} }
 func (m *Response) String() string { return proto.CompactTextString(m) }
 func (*Response) ProtoMessage()    {}
 func (*Response) Descriptor() ([]byte, []int) {
-	return fileDescriptor_author_72dfe00c5313624c, []int{3}
+	return fileDescriptor_author_a6d61f4ff1ae4ce3, []int{4}
 }
 func (m *Response) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Response.Unmarshal(m, b)
@@ -284,7 +313,7 @@ func (m *Error) Reset()         { *m = Error{} }
 func (m *Error) String() string { return proto.CompactTextString(m) }
 func (*Error) ProtoMessage()    {}
 func (*Error) Descriptor() ([]byte, []int) {
-	return fileDescriptor_author_72dfe00c5313624c, []int{4}
+	return fileDescriptor_author_a6d61f4ff1ae4ce3, []int{5}
 }
 func (m *Error) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Error.Unmarshal(m, b)
@@ -321,6 +350,7 @@ func (m *Error) GetDescription() string {
 func init() {
 	proto.RegisterType((*Author)(nil), "publication.management.author.Author")
 	proto.RegisterType((*Token)(nil), "publication.management.author.Token")
+	proto.RegisterType((*EmptyResponse)(nil), "publication.management.author.EmptyResponse")
 	proto.RegisterType((*GetAllRequest)(nil), "publication.management.author.GetAllRequest")
 	proto.RegisterType((*Response)(nil), "publication.management.author.Response")
 	proto.RegisterType((*Error)(nil), "publication.management.author.Error")
@@ -328,81 +358,80 @@ func init() {
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
-var _ client.Option
-var _ server.Option
+var _ grpc.ClientConn
 
-// Client API for AuthorService service
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
 
+// AuthorServiceClient is the client API for AuthorService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type AuthorServiceClient interface {
-	CreateAuthor(ctx context.Context, in *Author, opts ...client.CallOption) (*Response, error)
-	GetAuthor(ctx context.Context, in *Author, opts ...client.CallOption) (*Response, error)
-	GetAll(ctx context.Context, in *GetAllRequest, opts ...client.CallOption) (*Response, error)
-	ValidateToken(ctx context.Context, in *Token, opts ...client.CallOption) (*Token, error)
-	Authenticate(ctx context.Context, in *Author, opts ...client.CallOption) (*Token, error)
+	CreateAuthor(ctx context.Context, in *Author, opts ...grpc.CallOption) (*EmptyResponse, error)
+	GetAuthor(ctx context.Context, in *Author, opts ...grpc.CallOption) (*Response, error)
+	GetAll(ctx context.Context, in *GetAllRequest, opts ...grpc.CallOption) (*Response, error)
+	ValidateToken(ctx context.Context, in *Token, opts ...grpc.CallOption) (*Token, error)
+	InvalidateToken(ctx context.Context, in *Author, opts ...grpc.CallOption) (*EmptyResponse, error)
+	Authenticate(ctx context.Context, in *Author, opts ...grpc.CallOption) (*Token, error)
 }
 
 type authorServiceClient struct {
-	c           client.Client
-	serviceName string
+	cc *grpc.ClientConn
 }
 
-func NewAuthorServiceClient(serviceName string, c client.Client) AuthorServiceClient {
-	if c == nil {
-		c = client.NewClient()
-	}
-	if len(serviceName) == 0 {
-		serviceName = "publication.management.author"
-	}
-	return &authorServiceClient{
-		c:           c,
-		serviceName: serviceName,
-	}
+func NewAuthorServiceClient(cc *grpc.ClientConn) AuthorServiceClient {
+	return &authorServiceClient{cc}
 }
 
-func (c *authorServiceClient) CreateAuthor(ctx context.Context, in *Author, opts ...client.CallOption) (*Response, error) {
-	req := c.c.NewRequest(c.serviceName, "AuthorService.CreateAuthor", in)
-	out := new(Response)
-	err := c.c.Call(ctx, req, out, opts...)
+func (c *authorServiceClient) CreateAuthor(ctx context.Context, in *Author, opts ...grpc.CallOption) (*EmptyResponse, error) {
+	out := new(EmptyResponse)
+	err := c.cc.Invoke(ctx, "/publication.management.author.AuthorService/CreateAuthor", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authorServiceClient) GetAuthor(ctx context.Context, in *Author, opts ...client.CallOption) (*Response, error) {
-	req := c.c.NewRequest(c.serviceName, "AuthorService.GetAuthor", in)
+func (c *authorServiceClient) GetAuthor(ctx context.Context, in *Author, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.c.Call(ctx, req, out, opts...)
+	err := c.cc.Invoke(ctx, "/publication.management.author.AuthorService/GetAuthor", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authorServiceClient) GetAll(ctx context.Context, in *GetAllRequest, opts ...client.CallOption) (*Response, error) {
-	req := c.c.NewRequest(c.serviceName, "AuthorService.GetAll", in)
+func (c *authorServiceClient) GetAll(ctx context.Context, in *GetAllRequest, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.c.Call(ctx, req, out, opts...)
+	err := c.cc.Invoke(ctx, "/publication.management.author.AuthorService/GetAll", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authorServiceClient) ValidateToken(ctx context.Context, in *Token, opts ...client.CallOption) (*Token, error) {
-	req := c.c.NewRequest(c.serviceName, "AuthorService.ValidateToken", in)
+func (c *authorServiceClient) ValidateToken(ctx context.Context, in *Token, opts ...grpc.CallOption) (*Token, error) {
 	out := new(Token)
-	err := c.c.Call(ctx, req, out, opts...)
+	err := c.cc.Invoke(ctx, "/publication.management.author.AuthorService/ValidateToken", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authorServiceClient) Authenticate(ctx context.Context, in *Author, opts ...client.CallOption) (*Token, error) {
-	req := c.c.NewRequest(c.serviceName, "AuthorService.Authenticate", in)
+func (c *authorServiceClient) InvalidateToken(ctx context.Context, in *Author, opts ...grpc.CallOption) (*EmptyResponse, error) {
+	out := new(EmptyResponse)
+	err := c.cc.Invoke(ctx, "/publication.management.author.AuthorService/InvalidateToken", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authorServiceClient) Authenticate(ctx context.Context, in *Author, opts ...grpc.CallOption) (*Token, error) {
 	out := new(Token)
-	err := c.c.Call(ctx, req, out, opts...)
+	err := c.cc.Invoke(ctx, "/publication.management.author.AuthorService/Authenticate", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -411,73 +440,192 @@ func (c *authorServiceClient) Authenticate(ctx context.Context, in *Author, opts
 
 // Server API for AuthorService service
 
-type AuthorServiceHandler interface {
-	CreateAuthor(context.Context, *Author, *Response) error
-	GetAuthor(context.Context, *Author, *Response) error
-	GetAll(context.Context, *GetAllRequest, *Response) error
-	ValidateToken(context.Context, *Token, *Token) error
-	Authenticate(context.Context, *Author, *Token) error
+type AuthorServiceServer interface {
+	CreateAuthor(context.Context, *Author) (*EmptyResponse, error)
+	GetAuthor(context.Context, *Author) (*Response, error)
+	GetAll(context.Context, *GetAllRequest) (*Response, error)
+	ValidateToken(context.Context, *Token) (*Token, error)
+	InvalidateToken(context.Context, *Author) (*EmptyResponse, error)
+	Authenticate(context.Context, *Author) (*Token, error)
 }
 
-func RegisterAuthorServiceHandler(s server.Server, hdlr AuthorServiceHandler, opts ...server.HandlerOption) {
-	s.Handle(s.NewHandler(&AuthorService{hdlr}, opts...))
+func RegisterAuthorServiceServer(s *grpc.Server, srv AuthorServiceServer) {
+	s.RegisterService(&_AuthorService_serviceDesc, srv)
 }
 
-type AuthorService struct {
-	AuthorServiceHandler
+func _AuthorService_CreateAuthor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Author)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthorServiceServer).CreateAuthor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/publication.management.author.AuthorService/CreateAuthor",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthorServiceServer).CreateAuthor(ctx, req.(*Author))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func (h *AuthorService) CreateAuthor(ctx context.Context, in *Author, out *Response) error {
-	return h.AuthorServiceHandler.CreateAuthor(ctx, in, out)
+func _AuthorService_GetAuthor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Author)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthorServiceServer).GetAuthor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/publication.management.author.AuthorService/GetAuthor",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthorServiceServer).GetAuthor(ctx, req.(*Author))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func (h *AuthorService) GetAuthor(ctx context.Context, in *Author, out *Response) error {
-	return h.AuthorServiceHandler.GetAuthor(ctx, in, out)
+func _AuthorService_GetAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthorServiceServer).GetAll(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/publication.management.author.AuthorService/GetAll",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthorServiceServer).GetAll(ctx, req.(*GetAllRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func (h *AuthorService) GetAll(ctx context.Context, in *GetAllRequest, out *Response) error {
-	return h.AuthorServiceHandler.GetAll(ctx, in, out)
+func _AuthorService_ValidateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Token)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthorServiceServer).ValidateToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/publication.management.author.AuthorService/ValidateToken",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthorServiceServer).ValidateToken(ctx, req.(*Token))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func (h *AuthorService) ValidateToken(ctx context.Context, in *Token, out *Token) error {
-	return h.AuthorServiceHandler.ValidateToken(ctx, in, out)
+func _AuthorService_InvalidateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Author)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthorServiceServer).InvalidateToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/publication.management.author.AuthorService/InvalidateToken",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthorServiceServer).InvalidateToken(ctx, req.(*Author))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func (h *AuthorService) Authenticate(ctx context.Context, in *Author, out *Token) error {
-	return h.AuthorServiceHandler.Authenticate(ctx, in, out)
+func _AuthorService_Authenticate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Author)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthorServiceServer).Authenticate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/publication.management.author.AuthorService/Authenticate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthorServiceServer).Authenticate(ctx, req.(*Author))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func init() { proto.RegisterFile("proto/author.proto", fileDescriptor_author_72dfe00c5313624c) }
+var _AuthorService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "publication.management.author.AuthorService",
+	HandlerType: (*AuthorServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateAuthor",
+			Handler:    _AuthorService_CreateAuthor_Handler,
+		},
+		{
+			MethodName: "GetAuthor",
+			Handler:    _AuthorService_GetAuthor_Handler,
+		},
+		{
+			MethodName: "GetAll",
+			Handler:    _AuthorService_GetAll_Handler,
+		},
+		{
+			MethodName: "ValidateToken",
+			Handler:    _AuthorService_ValidateToken_Handler,
+		},
+		{
+			MethodName: "InvalidateToken",
+			Handler:    _AuthorService_InvalidateToken_Handler,
+		},
+		{
+			MethodName: "Authenticate",
+			Handler:    _AuthorService_Authenticate_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/author.proto",
+}
 
-var fileDescriptor_author_72dfe00c5313624c = []byte{
-	// 453 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x54, 0xcd, 0x8a, 0xd4, 0x40,
-	0x10, 0x76, 0x7e, 0x92, 0xc9, 0xd4, 0xec, 0x28, 0x14, 0x1e, 0x9a, 0x91, 0x85, 0x21, 0x28, 0xee,
-	0x41, 0x22, 0x8c, 0x37, 0x71, 0x91, 0x45, 0xc4, 0x9b, 0x87, 0x28, 0xde, 0x44, 0x7b, 0x93, 0x52,
-	0x1b, 0x93, 0x74, 0xb6, 0xbb, 0x67, 0xc5, 0x97, 0xf1, 0x99, 0x7c, 0x15, 0xdf, 0x40, 0xba, 0x3a,
-	0x8d, 0xe3, 0xc5, 0xc9, 0x1e, 0xbc, 0xd5, 0x57, 0x5f, 0x7d, 0x95, 0xae, 0xaf, 0x6a, 0x06, 0xb0,
-	0x37, 0xda, 0xe9, 0xc7, 0x72, 0xef, 0xbe, 0x68, 0x53, 0x30, 0xc0, 0xd3, 0x7e, 0x7f, 0xd9, 0xa8,
-	0x4a, 0x3a, 0xa5, 0xbb, 0xa2, 0x95, 0x9d, 0xfc, 0x4c, 0x2d, 0x75, 0xae, 0x08, 0x45, 0xf9, 0xcf,
-	0x09, 0xa4, 0x17, 0x1c, 0xe2, 0x6d, 0x98, 0xaa, 0x5a, 0x4c, 0xb6, 0x93, 0xb3, 0x65, 0x39, 0x55,
-	0x35, 0x9e, 0x02, 0x7c, 0x52, 0xc6, 0xba, 0x0f, 0x9d, 0x6c, 0x49, 0x4c, 0x39, 0xbf, 0xe4, 0xcc,
-	0x6b, 0xd9, 0x12, 0xde, 0x83, 0x65, 0x23, 0x23, 0x3b, 0x63, 0x36, 0xf3, 0x09, 0x26, 0x05, 0x2c,
-	0x64, 0x5d, 0x1b, 0xb2, 0x56, 0xcc, 0x99, 0x8a, 0xd0, 0x33, 0x95, 0xde, 0x77, 0xce, 0x7c, 0x17,
-	0x49, 0x60, 0x06, 0x88, 0x77, 0x21, 0xa1, 0x56, 0xaa, 0x46, 0xa4, 0x9c, 0x0f, 0x00, 0x37, 0x90,
-	0xf5, 0xd2, 0xda, 0x6f, 0xda, 0xd4, 0x62, 0x11, 0xbe, 0x12, 0xb1, 0x57, 0x38, 0xfd, 0x95, 0x3a,
-	0x91, 0x05, 0x05, 0x83, 0xfc, 0x0a, 0x92, 0xb7, 0x3e, 0xf8, 0x43, 0x4f, 0x0e, 0x68, 0x9f, 0xbd,
-	0x96, 0x8d, 0xaa, 0x79, 0xa2, 0xac, 0x0c, 0x00, 0x9f, 0x41, 0x4a, 0xc6, 0x68, 0x63, 0xc5, 0x6c,
-	0x3b, 0x3b, 0x5b, 0xed, 0xee, 0x17, 0xff, 0xf4, 0xad, 0x78, 0xe9, 0x8b, 0xcb, 0x41, 0x93, 0xdf,
-	0x81, 0xf5, 0x2b, 0x72, 0x17, 0x4d, 0x53, 0xd2, 0xd5, 0x9e, 0xac, 0xcb, 0x7f, 0x4c, 0x21, 0x2b,
-	0xc9, 0xf6, 0xba, 0xb3, 0x6c, 0x46, 0x65, 0x48, 0x3a, 0x0a, 0xee, 0x66, 0x65, 0x84, 0x78, 0x0e,
-	0x69, 0xe8, 0xc7, 0x8f, 0x59, 0xed, 0x1e, 0x1c, 0xf9, 0x6a, 0xd8, 0x54, 0x39, 0x88, 0xf0, 0x39,
-	0x2c, 0x42, 0x14, 0x5f, 0x3d, 0x52, 0x1f, 0x55, 0x07, 0x53, 0xcf, 0x6f, 0x3e, 0x35, 0x3e, 0x8d,
-	0xfe, 0x26, 0xfc, 0xf8, 0x63, 0x62, 0x5e, 0x4a, 0x5c, 0xd2, 0x39, 0x24, 0xdc, 0x0c, 0x11, 0xe6,
-	0x95, 0xae, 0x89, 0x9d, 0x49, 0x4a, 0x8e, 0x71, 0x0b, 0xab, 0x9a, 0x6c, 0x65, 0x54, 0xef, 0x5b,
-	0x0d, 0xa7, 0x77, 0x98, 0xda, 0xfd, 0x9a, 0xc1, 0x3a, 0x0c, 0xf3, 0x86, 0xcc, 0xb5, 0xaa, 0x08,
-	0x3f, 0xc2, 0xc9, 0x0b, 0x76, 0x75, 0xb8, 0xe6, 0x71, 0x56, 0x6c, 0x1e, 0x1e, 0x29, 0x8b, 0x4b,
-	0xcc, 0x6f, 0xe1, 0x7b, 0x58, 0xfa, 0x25, 0xff, 0xaf, 0xf6, 0x12, 0xd2, 0x70, 0x43, 0xf8, 0xe8,
-	0x88, 0xe8, 0xaf, 0x53, 0xbb, 0xd9, 0x04, 0xeb, 0x77, 0xfe, 0xda, 0xa5, 0xa3, 0xf0, 0x0b, 0x19,
-	0xb5, 0xb2, 0xcd, 0xa8, 0x2a, 0x6e, 0x7f, 0xe2, 0xc7, 0xa6, 0xce, 0xf9, 0x5a, 0x1a, 0xeb, 0xd1,
-	0xc8, 0xf6, 0x97, 0x29, 0xff, 0xa1, 0x3d, 0xf9, 0x1d, 0x00, 0x00, 0xff, 0xff, 0x91, 0x0c, 0xe2,
-	0xf8, 0xe6, 0x04, 0x00, 0x00,
+func init() { proto.RegisterFile("proto/author.proto", fileDescriptor_author_a6d61f4ff1ae4ce3) }
+
+var fileDescriptor_author_a6d61f4ff1ae4ce3 = []byte{
+	// 480 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x54, 0xcf, 0x8a, 0xd4, 0x4e,
+	0x10, 0xde, 0xf9, 0x93, 0x4c, 0xa6, 0x66, 0xe7, 0xb7, 0x50, 0xfc, 0x0e, 0x61, 0x64, 0x61, 0x08,
+	0x8a, 0x7b, 0x90, 0x08, 0xe3, 0x4d, 0x5c, 0x64, 0x91, 0x45, 0xbc, 0x78, 0x88, 0xe2, 0x6d, 0x91,
+	0xde, 0xa4, 0x74, 0x83, 0x49, 0x3a, 0xdb, 0xdd, 0x33, 0xb2, 0x2f, 0xe3, 0x33, 0xf9, 0x08, 0x3e,
+	0x8a, 0x74, 0x75, 0x1a, 0x67, 0x2e, 0x26, 0x73, 0xf0, 0xd6, 0x5f, 0x7d, 0xfd, 0x75, 0x55, 0x7d,
+	0x55, 0x09, 0x60, 0xab, 0xa4, 0x91, 0xcf, 0xc5, 0xd6, 0xdc, 0x49, 0x95, 0x32, 0xc0, 0xf3, 0x76,
+	0x7b, 0x5b, 0x95, 0xb9, 0x30, 0xa5, 0x6c, 0xd2, 0x5a, 0x34, 0xe2, 0x2b, 0xd5, 0xd4, 0x98, 0xd4,
+	0x5d, 0x4a, 0x7e, 0x8e, 0x20, 0xbc, 0xe2, 0x23, 0xfe, 0x07, 0xe3, 0xb2, 0x88, 0x47, 0xeb, 0xd1,
+	0xc5, 0x3c, 0x1b, 0x97, 0x05, 0x9e, 0x03, 0x7c, 0x29, 0x95, 0x36, 0x9f, 0x1b, 0x51, 0x53, 0x3c,
+	0xe6, 0xf8, 0x9c, 0x23, 0xef, 0x45, 0x4d, 0xf8, 0x08, 0xe6, 0x95, 0xf0, 0xec, 0x84, 0xd9, 0xc8,
+	0x06, 0x98, 0x8c, 0x61, 0x26, 0x8a, 0x42, 0x91, 0xd6, 0xf1, 0x94, 0x29, 0x0f, 0x2d, 0x93, 0xcb,
+	0x6d, 0x63, 0xd4, 0x43, 0x1c, 0x38, 0xa6, 0x83, 0xf8, 0x3f, 0x04, 0x54, 0x8b, 0xb2, 0x8a, 0x43,
+	0x8e, 0x3b, 0x80, 0x2b, 0x88, 0x5a, 0xa1, 0xf5, 0x77, 0xa9, 0x8a, 0x78, 0xe6, 0xb2, 0x78, 0x6c,
+	0x15, 0x46, 0x7e, 0xa3, 0x26, 0x8e, 0x9c, 0x82, 0x41, 0x72, 0x0f, 0xc1, 0x47, 0x7b, 0xf8, 0x43,
+	0x8f, 0xf6, 0x68, 0x1b, 0xdd, 0x89, 0xaa, 0x2c, 0xb8, 0xa3, 0x28, 0x73, 0x00, 0x5f, 0x41, 0x48,
+	0x4a, 0x49, 0xa5, 0xe3, 0xc9, 0x7a, 0x72, 0xb1, 0xd8, 0x3c, 0x4e, 0xff, 0xea, 0x5b, 0x7a, 0x6d,
+	0x2f, 0x67, 0x9d, 0x26, 0x39, 0x83, 0xe5, 0x75, 0xdd, 0x9a, 0x87, 0x8c, 0x74, 0x2b, 0x1b, 0x4d,
+	0x36, 0xf0, 0x96, 0xcc, 0x55, 0x55, 0x65, 0x74, 0xbf, 0x25, 0x6d, 0x92, 0x1f, 0x63, 0x88, 0x3c,
+	0xcb, 0x1e, 0x28, 0x12, 0x86, 0x9c, 0xdd, 0x51, 0xe6, 0x21, 0x5e, 0x42, 0xe8, 0x12, 0x70, 0x75,
+	0x8b, 0xcd, 0x93, 0x9e, 0x32, 0xdc, 0xe8, 0xb2, 0x4e, 0x84, 0xaf, 0x61, 0xe6, 0x4e, 0xbe, 0x8d,
+	0x81, 0x7a, 0xaf, 0xda, 0xb3, 0x61, 0x7a, 0xbc, 0x0d, 0xf8, 0xd2, 0x1b, 0x1e, 0x70, 0xf1, 0x7d,
+	0x62, 0x9e, 0x92, 0x9f, 0xda, 0x25, 0x04, 0xfc, 0x18, 0x22, 0x4c, 0x73, 0x59, 0x10, 0x3b, 0x13,
+	0x64, 0x7c, 0xc6, 0x35, 0x2c, 0x0a, 0xd2, 0xb9, 0x2a, 0x5b, 0xfb, 0x54, 0xb7, 0x8b, 0xfb, 0xa1,
+	0xcd, 0xaf, 0x29, 0x2c, 0x5d, 0x33, 0x1f, 0x48, 0xed, 0xca, 0x9c, 0x90, 0xe0, 0xf4, 0x0d, 0xbb,
+	0xda, 0xad, 0xf7, 0x30, 0x2b, 0x56, 0xcf, 0xfa, 0x3a, 0x3e, 0x98, 0xf3, 0x09, 0xde, 0xc0, 0xdc,
+	0x4e, 0xfa, 0xa8, 0x1c, 0x4f, 0x7b, 0xae, 0xed, 0x3d, 0x2f, 0x20, 0x74, 0x8b, 0x84, 0x7d, 0x85,
+	0x1d, 0xec, 0xdb, 0x31, 0x29, 0x6e, 0x60, 0xf9, 0xc9, 0x7e, 0x03, 0xc2, 0x90, 0xfb, 0x6e, 0x06,
+	0xcd, 0x6d, 0x35, 0xe8, 0x56, 0x72, 0x82, 0x77, 0x70, 0xf6, 0xae, 0xd9, 0x1d, 0x24, 0xf8, 0x67,
+	0xa3, 0x38, 0xb5, 0x4a, 0x6a, 0x8c, 0xd5, 0xd0, 0xd0, 0x34, 0x03, 0x1b, 0xb9, 0x0d, 0xf9, 0x87,
+	0xfa, 0xe2, 0x77, 0x00, 0x00, 0x00, 0xff, 0xff, 0x30, 0xa5, 0x7a, 0x19, 0x66, 0x05, 0x00, 0x00,
 }
