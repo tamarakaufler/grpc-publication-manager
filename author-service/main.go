@@ -8,7 +8,6 @@ import (
 
 	proto "github.com/tamarakaufler/grpc-publication-manager/author-service/proto"
 	"google.golang.org/grpc"
-	//"google.golang.org/grpc/reflection"
 )
 
 var (
@@ -53,6 +52,7 @@ func main() {
 	// for the protobuf definition.
 	proto.RegisterAuthorServiceServer(s, &service{db, tokenService})
 
+	log.Println("Starting server ...")
 	if err := s.Serve(conn); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

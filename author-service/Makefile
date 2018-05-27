@@ -1,6 +1,9 @@
 IMAGE_TAG=v1alpha1
 QUAY_PASS?=biggestsecret
 
+net:
+	docker network create --driver bridge pm-net-bridge
+
 protoc:
 	protoc -I/usr/local/include -I. --go_out=plugins=grpc:$(GOPATH)/src/github.com/tamarakaufler/grpc-publication-manager/author-service \
     proto/author.proto
@@ -19,10 +22,9 @@ dev: protoc
 
 run:
 	docker run \
-	--name="author-service" \
-	--net="host" \
+	--name=author-service \
+	--network=pm-net-bridge \
+	-e DB_HOST=author-postgres:5432 \
 	--rm \
 	-p 50051:50051 \
-	-e DB_USER=author_user \
-	-e DB_PASS=authorpass \
 	quay.io/tamarakaufler/grpc-author-service:$(IMAGE_TAG)
