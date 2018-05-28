@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Credits: based on https://medium.com/@beld_pro/quick-tip-creating-a-postgresql-container-with-default-user-and-password-8bb2adb82342
+
 # This script is used to initialize postgres, after it started running,
 # to provide the database(s) and table(s) expected by a connecting
 # application.
@@ -24,7 +26,7 @@ POSTGRES_USER=${POSTGRES_USER:-postgres}
 # to set set it up when we start running the container:
 #
 #   docker run --rm -e POSTGRES_PASSWORD=mypass -p 5432:5432 -d --name author_postgres author_postgres
-#   psql -h localhost -p 5432 -U postgre
+#   psql -h localhost -p 5432 -U postgres
 
 #       Note that unlike in MySQL, psql does not provide a flag for providing password.
 #       The password is provided interactively.
@@ -68,9 +70,7 @@ main() {
 # HELPER FUNCTIONS
 
 # Check if all of the required environment
-# variables are set. If one of them isn't,
-# echoes a text explaining which one isn't
-# and the name of the ones that need to be
+# variables are set
 check_env_vars_set() {
   for required_env_var in ${REQUIRED_ENV_VARS[@]}; do
     if [[ -z "${!required_env_var}" ]]; then

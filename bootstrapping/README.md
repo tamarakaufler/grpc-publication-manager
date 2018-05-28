@@ -7,4 +7,3 @@ publisher-service: MongoDB
 book-service: MongoDB
 
 author-service needs NATS messaging for sending emails
-
