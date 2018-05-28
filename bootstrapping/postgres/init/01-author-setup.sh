@@ -17,7 +17,7 @@
 set -o errexit
 
 PUBLICATION_MANAGER_DB=${PUBLICATION_MANAGER_DB:-publication_manager}
-AUTHOR_DB_TABLE=${AUTHOR_DB_TABLE:-author}
+AUTHOR_DB_TABLE=${AUTHOR_DB_TABLE:-authors}
 AUTHOR_DB_USER=${AUTHOR_DB_USER:-author_user}
 AUTHOR_DB_PASSWORD=${AUTHOR_DB_PASSWORD:-authorpass}
 POSTGRES_USER=${POSTGRES_USER:-postgres}
@@ -63,7 +63,12 @@ readonly REQUIRED_ENV_VARS=(
 main() {
   check_env_vars_set
   init_user_and_db
-  init_db_tables
+
+  # Comment out if wanting to use the author-service uses gorm AutoMigrate feature
+  #   the gorm AutoMigrate feature creates extra columns (xxx_unrecognized, xxx_sizecache)
+  #   based on the proto message, which is required for proto message to work
+  #   with the table
+  # init_db_tables
 }
 
 # ----------------------------------------------------------
@@ -85,7 +90,9 @@ Aborting."
 }
 
 # Perform initialization in the already-started PostgreSQL
-#   - set up user for the author-service database
+#   - set up user for the author-service database:
+#         this user needs to be able to create a table,
+#         to insert/update and delete records
 #   - create the database
 init_user_and_db() {
   psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
@@ -97,7 +104,7 @@ EOSQL
 
 #   - create database tables
 init_db_tables() {
-  psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+  psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" "$PUBLICATION_MANAGER_DB" <<-EOSQL
     CREATE TABLE $AUTHOR_DB_TABLE(
     ID             CHAR VARYING(60) PRIMARY KEY NOT NULL,
     FIRST_NAME     CHAR VARYING(40) NOT NULL,

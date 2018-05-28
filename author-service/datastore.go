@@ -1,14 +1,8 @@
 package main
 
 import (
-	"errors"
-
 	"github.com/jinzhu/gorm"
 	proto "github.com/tamarakaufler/grpc-publication-manager/author-service/proto"
-)
-
-var (
-	ErrAuthorExists = errors.New("Author already exists")
 )
 
 type Datastore interface {
@@ -16,7 +10,7 @@ type Datastore interface {
 	Get(id string) error
 	GetByEmail(author *proto.Author) (*proto.Author, error)
 	GetAllAuthors() ([]*proto.Author, error)
-	Update(*proto.Author) error
+	UpdateToken(*proto.Author) error
 }
 
 type Store struct {
@@ -58,9 +52,6 @@ func (st *Store) GetAll() ([]*proto.Author, error) {
 	return authors, nil
 }
 
-func (st *Store) Update(author *proto.Author) error {
-	if err := st.db.Update(author).Error; err != nil {
-		return err
-	}
-	return nil
+func (st *Store) UpdateToken(author *proto.Author) error {
+	return st.db.Model(author).Update("token", author.Token).Error
 }

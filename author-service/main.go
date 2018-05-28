@@ -26,11 +26,11 @@ func main() {
 		log.Println("Connected to database ...")
 	}
 
-	// Mmigrates author struct
+	// Migrates author struct
 	// into database columns/types.
 	// Will migrate changes each time
 	// the service is restarted.
-	// dbConn.AutoMigrate(&proto.Author{})
+	dbConn.AutoMigrate(&proto.Author{})
 
 	db := &Store{dbConn}
 	tokenService := TokenService{}

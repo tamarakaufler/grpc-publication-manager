@@ -9,6 +9,7 @@ import (
 )
 
 var (
+	ErrAuthorExists   = errors.New("Author already exists")
 	ErrAuthorNotFound = errors.New("Author not found")
 	ErrInvalidAuthor  = errors.New("Author not valid")
 )
@@ -20,8 +21,8 @@ type service struct {
 
 // CreateAuthor hashes the plaintext password and inserts the author in the database
 func (s *service) CreateAuthor(ctx context.Context, req *proto.Author) (*proto.EmptyResponse, error) {
-	_, ok := s.getAuthorByEmail(ctx, req)
-	if ok {
+	_, err := s.getAuthorByEmail(ctx, req)
+	if err == nil {
 		return nil, ErrAuthorExists
 	}
 
@@ -33,12 +34,12 @@ func (s *service) CreateAuthor(ctx context.Context, req *proto.Author) (*proto.E
 	return &proto.EmptyResponse{}, s.db.Create(req)
 }
 
-func (s *service) getAuthorByEmail(ctx context.Context, req *proto.Author) (*proto.Author, bool) {
+func (s *service) getAuthorByEmail(ctx context.Context, req *proto.Author) (*proto.Author, error) {
 	author, err := s.db.GetByEmail(req.Email)
 	if err != nil {
-		return author, true
+		return nil, err
 	}
-	return nil, false
+	return author, nil
 }
 
 func (s *service) GetAuthor(ctx context.Context, req *proto.Author) (*proto.Response, error) {
@@ -62,19 +63,19 @@ func (s *service) GetAllAuthors(ctx context.Context, req *proto.GetAllRequest) (
 func (s *service) Authenticate(ctx context.Context, req *proto.Author) (*proto.Token, error) {
 	author, err := s.db.GetByEmail(req.Email)
 	if err != nil {
-		return nil, ErrAuthorNotFound
+		return nil, err
 	}
 
 	if err = bcrypt.CompareHashAndPassword([]byte(author.Password), []byte(req.Password)); err != nil {
 		return nil, err
 	}
+
 	token, err := s.tokenService.Encode(author)
 	if err != nil {
 		return nil, err
 	}
-
-	req.Token = token
-	if err := s.db.Update(req); err != nil {
+	author.Token = token
+	if err := s.db.UpdateToken(author); err != nil {
 		return nil, err
 	}
 
@@ -100,5 +101,5 @@ func (s *service) ValidateToken(ctx context.Context, t *proto.Token) (*proto.Tok
 
 func (s *service) InvalidateToken(ctx context.Context, author *proto.Author) (*proto.EmptyResponse, error) {
 	author.Token = ""
-	return &proto.EmptyResponse{}, s.db.Update(author)
+	return &proto.EmptyResponse{}, s.db.UpdateToken(author)
 }
