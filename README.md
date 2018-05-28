@@ -2,12 +2,12 @@
 
 An implementation of a system, publication-manager, through which authors can
 have their books published. The microservice architecture was chosen for the 
-project. There are three microservices. Each one persists data in a database.
+project. There will be three microservices. Each one persisting data in a database.
 Development and deployment takes advantage of containerization (Docker).
 
 The system is a bit contrived, with the main purpose of examining and showing
-how certain features (using JWT) and tasks (bootstapping databases, running
-several microservices locally) can be implemented.
+how certain features (using JWT etc) and tasks (bootstapping databases, running
+several microservices locally etc) can be implemented.
 
 WIP
 
