@@ -64,10 +64,10 @@ main() {
   check_env_vars_set
   init_user_and_db
 
-  # Comment out if wanting to use the author-service uses gorm AutoMigrate feature
+  # Comment out if wanting to use the author-service uses gorm AutoMigrate feature:
   #   the gorm AutoMigrate feature creates extra columns (xxx_unrecognized, xxx_sizecache)
-  #   based on the proto message, which is required for proto message to work
-  #   with the table
+  #   based on the proto message, which are required for proto messages transactions
+  #   to work with the table
   # init_db_tables
 }
 
