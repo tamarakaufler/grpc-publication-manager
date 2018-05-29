@@ -90,14 +90,14 @@ Aborting."
 }
 
 # Perform initialization in the already-started PostgreSQL
+#   - create the database
 #   - set up user for the author-service database:
 #         this user needs to be able to create a table,
 #         to insert/update and delete records
-#   - create the database
 init_user_and_db() {
   psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
-     CREATE USER $AUTHOR_DB_USER WITH PASSWORD '$AUTHOR_DB_PASSWORD';
      CREATE DATABASE $PUBLICATION_MANAGER_DB;
+     CREATE USER $AUTHOR_DB_USER WITH PASSWORD '$AUTHOR_DB_PASSWORD';
      GRANT ALL PRIVILEGES ON DATABASE $PUBLICATION_MANAGER_DB TO $AUTHOR_DB_USER;
 EOSQL
 }
