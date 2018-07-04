@@ -5,9 +5,8 @@ have their books published. The microservice architecture was chosen for the
 project. There will be three microservices. Each one persisting data in a database.
 Development and deployment takes advantage of containerization (Docker).
 
-The system is a bit contrived, with the main purpose of examining and showing
-how certain features (using JWT etc) and tasks (bootstapping databases, running
-several microservices locally etc) can be implemented.
+The main purpose of the system is to show how certain features (using JWT etc) and tasks
+(bootstapping databases, running several microservices locally etc) can be implemented.
 
 WIP
 
